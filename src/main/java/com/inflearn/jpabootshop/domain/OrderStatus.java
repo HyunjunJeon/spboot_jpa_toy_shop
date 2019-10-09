@@ -1,0 +1,5 @@
+package com.inflearn.jpabootshop.domain;
+
+public enum OrderStatus {
+    ORDER, CANCLE
+}
