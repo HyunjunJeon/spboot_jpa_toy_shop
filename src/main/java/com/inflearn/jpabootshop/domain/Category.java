@@ -27,12 +27,17 @@ public class Category {
     )
     private List<Item> items = new ArrayList<>();
 
-    // Self 양방향 연관관계 맺어줌..
-    @ManyToOne
+    // Self 양방향 연관관계 맺어줌
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
     @OneToMany(mappedBy = "parent")
     private List<Category> child = new ArrayList<>();
 
+    // ## 연관관계 메서드 - 양방향 연관관계일때, 원자적으로 결합시키기 위해서 ##
+    public void addChildCategory(Category child){
+        this.child.add(child);
+        child.setParent(this);
+    }
 }
