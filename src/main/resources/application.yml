@@ -6,7 +6,6 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     database: postgresql
-    show-sql: true
     hibernate:
       ddl-auto: create
     properties:
@@ -16,5 +15,5 @@ spring:
 
 logging:
   level:
-    org.hibernate.type: trace
-    org.hibernate.SQL: debug
+    org.hibernate.type: trace # SQL Parameter Mapping 추적
+    org.hibernate.SQL: debug # SQL 출력
