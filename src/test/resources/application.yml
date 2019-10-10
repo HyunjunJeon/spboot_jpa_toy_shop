@@ -1,17 +1,15 @@
-#spring:
+# SpringBoot => 밑에 Data Source, JPA 없어도 돌아간다.... Test를 알아서 H2 In-Memory로 돌려버림...
+spring:
 #  datasource:
-#    url: jdbc:postgresql://localhost:5432/spboot
-#    username: spboot
-#    password: spboot
-#    driver-class-name: org.postgresql.Driver
-#  jpa:
-#    database: postgresql
-#    hibernate:
-#      ddl-auto: create
-#    properties:
-#      hibernate:
-#        format_sql: true
-#        jdbc.lob.non_contextual_creation: true
+#    url: jdbc:mem:h2:test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+  jpa:
+    database: h2
+    properties:
+      hibernate:
+        format_sql: true
 
 logging:
   level:
