@@ -49,6 +49,7 @@ public class Order {
         delivery.setOrder(this);
     }
 
+    // @@ 비지니스 로직
 
 
 }

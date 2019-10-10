@@ -1,0 +1,19 @@
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/spboot
+#    username: spboot
+#    password: spboot
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    database: postgresql
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        jdbc.lob.non_contextual_creation: true
+
+logging:
+  level:
+    org.hibernate.type: trace # SQL Parameter Mapping 추적
+    org.hibernate.SQL: debug # SQL 출력
