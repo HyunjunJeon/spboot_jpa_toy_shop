@@ -2,6 +2,7 @@ package com.inflearn.jpabootshop.repository;
 
 import com.inflearn.jpabootshop.domain.Order;
 import com.inflearn.jpabootshop.domain.OrderSearch;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRepository {
     private final EntityManager entityManager;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public void save(Order order){
         entityManager.persist(order);
@@ -22,6 +24,7 @@ public class OrderRepository {
     }
 
     public List<Order> findAll(OrderSearch orderSearch){
+        // 추후 QueryDSL을 활용하여 동적 쿼리로 만들어볼 것
 
         return entityManager.createQuery(
                 "select o from Order o join o.member m" +
