@@ -23,9 +23,8 @@ public class OrderRepository {
         return entityManager.find(Order.class, id);
     }
 
-    public List<Order> findAll(OrderSearch orderSearch){
+    public List<Order> findAllByCreteria(OrderSearch orderSearch) {
         // 추후 QueryDSL을 활용하여 동적 쿼리로 만들어볼 것
-
         return entityManager.createQuery(
                 "select o from Order o join o.member m" +
                 " where o.status =:status" +

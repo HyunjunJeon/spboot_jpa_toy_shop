@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Table(name = "orders")
@@ -80,6 +80,7 @@ public class Order {
         if(delivery.getStatus() == DeliveryStatus.COMP){
             throw new IllegalStateException("이미 배송이 완료된 상품은 주문 취소가 불가능 합니다.");
         }
+
         this.setStatus(OrderStatus.CANCEL);
 
         for(OrderItem orderItem : this.orderItems){

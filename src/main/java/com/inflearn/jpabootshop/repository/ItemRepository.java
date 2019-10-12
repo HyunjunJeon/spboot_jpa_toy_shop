@@ -14,9 +14,12 @@ public class ItemRepository {
 
     public Long save(Item item){
         if(item.getId() == null){
+            // 새로운 Object니까 persist 해서 DB에 등록
             entityManager.persist(item);
         } else {
-            entityManager.merge(item); // 강제로 Update
+            // 준영속 상태의 객체를 받아서 억지로 엔티티 필드 전체를 교체를 시켜버리고
+            // 영속상태의 새로운 객체를 반환함
+            entityManager.merge(item);
         }
         return item.getId();
     }
