@@ -1,6 +1,5 @@
 package com.inflearn.jpabootshop.service;
 
-import com.inflearn.jpabootshop.domain.item.Book;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,10 @@ public class ItemUpdateTest {
 
     @Test
     public void updateTest() throws Exception {
-        Book book = em.find(Book.class, 1L);
-
-        // TX
-        book.setName("test_book");
+//        Book book = em.find(Book.class, 1L);
+//
+//        // TX
+//        book.setName("test_book");
 
         // 변경감지 == Dirty Checking
         // TX _ COMMIT
