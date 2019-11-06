@@ -14,7 +14,7 @@
             </div>
             <div class="form-group mx-sm-1 mb-2">
                 <select th:field="*{orderStatus}" class="form-control">
-                    <option value="">주문 상태</option>
+                    <option>주문 상태</option>
                     <option th:each="status : ${T(com.inflearn.jpabootshop.domain.OrderStatus).values()}"
                             th:value="${status}"
                             th:text="${status}">option
