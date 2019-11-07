@@ -5,6 +5,7 @@ import com.inflearn.jpabootshop.domain.Order;
 import com.inflearn.jpabootshop.domain.OrderSearch;
 import com.inflearn.jpabootshop.domain.OrderStatus;
 import com.inflearn.jpabootshop.repository.OrderRepository;
+import com.inflearn.jpabootshop.repository.SimpleOrderQueryDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,7 +45,7 @@ public class OrderSimpleApiController {
     }
 
     @Data
-    static class SimpleOrderDto {
+    public static class SimpleOrderDto {
         private Long orderId;
         private String name;
         private LocalDateTime orderDate;
@@ -66,4 +67,12 @@ public class OrderSimpleApiController {
         List<Order> orders = orderRepository.findAllWithMemberDelivery();
         return orders.stream().map(SimpleOrderDto::new).collect(Collectors.toList());
     }
+
+    @GetMapping("/api/v4/orders")
+    public List<SimpleOrderQueryDto> ordersV4() {
+        // 바로 DTO를 통해 JPA에서 바로 조회하고 매핑시키기 때문에 데이터 조회시에 select 절에 선택하는 개수를 적절하게 조절가능함
+        return orderRepository.findOrderDtos();
+    }
+
+
 }

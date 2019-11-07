@@ -1,7 +1,9 @@
 package com.inflearn.jpabootshop.repository;
 
 import com.inflearn.jpabootshop.domain.Order;
-import com.inflearn.jpabootshop.domain.OrderSearch;
+import com.inflearn.jpabootshop.domain.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -16,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRepository {
     private final EntityManager entityManager;
-    //private final JPAQueryFactory jpaQueryFactory;
+    private final JPAQueryFactory jpaQueryFactory;
 
     public void save(Order order) {
         entityManager.persist(order);
@@ -75,6 +77,7 @@ public class OrderRepository {
         return query.getResultList();
     }
 
+    // Ver.3
     public List<Order> findAllWithMemberDelivery() {
         // Fetch Join을 이용한 해결
         return entityManager.createQuery(
@@ -83,30 +86,52 @@ public class OrderRepository {
                         "join fetch o.delivery d", Order.class).getResultList();
     }
 
-//    public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
-//        QOrder order = QOrder.order;
-//        QMember member = QMember.member;
-//
-//        return query
-//                .select(order)
-//                .from(order)
-//                .join(order.member, member)
-//                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
-//                .limit(1000)
-//                .fetch();
-//    }
-//
-//    private BooleanExpression statusEq(OrderStatus status) {
-//        if (status == null) {
-//            return null;
-//        }
-//        return order.status.eq(status);
-//    }
-//
-//    private BooleanExpression nameLike(String name) {
-//        if (!StringUtils.hasText(name)) {
-//            return null;
-//        }
-//        return member.name.like(name);
-//    }
+    // Ver.4
+    public List<SimpleOrderQueryDto> findOrderDtos() {
+        // Entity 나 Embedded 타입만 JPA에서 반환 가능
+        /*
+            JPQL을 직접 짜놨기 때문에... 재사용성 없음(딱 Fit하게 맞춰놨기도 하고, 코드도 지저분하고.. 그대신 Network을 덜 사용하긴 함)
+            -> 근데.. 요즘 network이 너무 좋아서 엄청나게 데이터양이 큰 컬럼이 선택되지 않는 한 크게 성능 최적화가 있지는 않음
+            new 명령어를 사용해서 JPQL의 결과를 DTO로 즉시 변환
+
+            그리고 API 스펙이 여기에 들어와 있는 것(Repository 계층에..) 자체도 맞지 않음!!
+            따로 계층을 더 빼서 사용하는게 관리 포인트적인 측면으로 좋음
+            예를 들면,,, OrderQueryRepository 뭐 이렇게 만들어서 조회 전용 DTO 포인트는 따로 주는게 좋음
+            OrderRepository는 Order 엔티티를 조회하는 레포지토리임..!
+         */
+        return entityManager.createQuery(
+                "select new com.inflearn.jpabootshop.repository.SimpleOrderQueryDto(" +
+                        "o.id, m.name, o.orderDate, o.status, d.address) " +
+                        "from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d", SimpleOrderQueryDto.class)
+                .getResultList();
+    }
+
+    public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        return jpaQueryFactory
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus(), order), nameLike(orderSearch.getMemberName(), member))
+                .limit(1000)
+                .fetch();
+    }
+
+    private BooleanExpression statusEq(OrderStatus status, QOrder order) {
+        if (status == null) {
+            return null;
+        }
+        return order.status.eq(status);
+    }
+
+    private BooleanExpression nameLike(String name, QMember member) {
+        if (!StringUtils.hasText(name)) {
+            return null;
+        }
+        return member.name.like(name);
+    }
 }
