@@ -16,7 +16,7 @@ public class ItemService { // 너무 단순히 위임만 하는 Service는 굳�
     private final ItemRepository itemRepository;
 
     @Transactional
-    public Long saveItem(Item item){
+    public Long saveItem(Item item) {
         return itemRepository.save(item);
     }
 
@@ -42,11 +42,11 @@ public class ItemService { // 너무 단순히 위임만 하는 Service는 굳�
         return findItem;
     }
 
-    public List<Item> findAllItems(){
+    public List<Item> findAllItems() {
         return itemRepository.findAll();
     }
 
-    public Item findOneItem(Long id){
+    public Item findOneItem(Long id) {
         return itemRepository.findOne(id);
     }
 

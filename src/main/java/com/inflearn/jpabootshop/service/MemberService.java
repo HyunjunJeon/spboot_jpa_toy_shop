@@ -17,7 +17,7 @@ public class MemberService {
 
     // 회원 가입
     @Transactional // 쓰기가 필요하므로 readOnly = false를 해줌
-    public Long join(Member member){
+    public Long join(Member member) {
         validateDuplicateMember(member);
         memberRepository.save(member);
         return member.getId();
@@ -28,17 +28,17 @@ public class MemberService {
         // 실무에서는 name에 Unique 제약조건을 걸든 다른곳에 걸든 해서 최종적인 검증을 해야한다
         // 멀티 쓰레드 환경, 여러대의 WAS가 돌아가고 DB에 동시에 접근하는 경우 하단의 Validation이 통과될 가능성도 있다.
         List<Member> findMembers = memberRepository.findByName(member.getName());
-        if(!findMembers.isEmpty()){
+        if (!findMembers.isEmpty()) {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }
     }
 
     // 회원 전체 조회
-    public List<Member> findMembers(){
+    public List<Member> findMembers() {
         return memberRepository.findAll();
     }
 
-    public Member findOne(Long memberId){
+    public Member findOne(Long memberId) {
         return memberRepository.findOne(memberId);
     }
 

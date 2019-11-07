@@ -12,8 +12,8 @@ import java.util.List;
 public class ItemRepository {
     private final EntityManager entityManager;
 
-    public Long save(Item item){
-        if(item.getId() == null){
+    public Long save(Item item) {
+        if (item.getId() == null) {
             // 새로운 Object니까 persist 해서 DB에 등록
             entityManager.persist(item);
         } else {
@@ -24,15 +24,15 @@ public class ItemRepository {
         return item.getId();
     }
 
-    public Item findOne(Long id){
+    public Item findOne(Long id) {
         return entityManager.find(Item.class, id);
     }
 
-    public List<Item> findAll(){
+    public List<Item> findAll() {
         return entityManager
                 .createQuery("select i from Item i", Item.class)
                 .getResultList()
-        ;
+                ;
     }
 
 

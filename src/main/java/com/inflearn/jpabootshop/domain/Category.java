@@ -9,9 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Category {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "category_id")
     private Long id;
 
@@ -22,8 +24,8 @@ public class Category {
     // 하다못해 날짜라도 넣으려고 하면.. 1:N ~ N:1 로 깨부셔야함
     @ManyToMany
     @JoinTable(name = "category_item",
-        joinColumns = @JoinColumn(name = "category_id"),
-        inverseJoinColumns = @JoinColumn(name = "item_id")
+            joinColumns = @JoinColumn(name = "category_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
     )
     private List<Item> items = new ArrayList<>();
 
@@ -36,7 +38,7 @@ public class Category {
     private List<Category> child = new ArrayList<>();
 
     // ## 연관관계 메서드 - 양방향 연관관계일때, 원자적으로 결합시키기 위해서 ##
-    public void addChildCategory(Category child){
+    public void addChildCategory(Category child) {
         this.child.add(child);
         child.setParent(this);
     }

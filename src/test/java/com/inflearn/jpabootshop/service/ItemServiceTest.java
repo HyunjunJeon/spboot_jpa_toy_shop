@@ -31,7 +31,7 @@ public class ItemServiceTest {
 
     @Test
     @Rollback(false) // 다음 테스트를 위해서 False 로 놔둠
-    public void Item_Save() throws Exception{
+    public void Item_Save() throws Exception {
         // Given
         Item item = new Book();
         item.setName("Algorithm");
@@ -47,11 +47,13 @@ public class ItemServiceTest {
 
     // 단순히 조회하는 부분이라 생략
     @Test
-    public void Item_findOne() throws Exception{}
+    public void Item_findOne() throws Exception {
+    }
 
     // 단순히 조회하는 부분이라 생략
     @Test
-    public void Item_findAll() throws Exception{}
+    public void Item_findAll() throws Exception {
+    }
 
 
 }

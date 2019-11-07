@@ -14,7 +14,8 @@ public class Address {
     private String street;
     private String zipcode;
 
-    protected Address() {} // Proxy나 Reflection으로는 접근 가능하도록
+    protected Address() {
+    } // Proxy나 Reflection으로는 접근 가능하도록
 
     public Address(String city, String street, String zipcode) {
         this.city = city;

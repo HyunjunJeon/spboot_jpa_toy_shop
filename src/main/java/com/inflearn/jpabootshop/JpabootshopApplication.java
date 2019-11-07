@@ -9,5 +9,4 @@ public class JpabootshopApplication {
     public static void main(String[] args) {
         SpringApplication.run(JpabootshopApplication.class, args);
     }
-
 }

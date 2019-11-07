@@ -1,8 +1,7 @@
 package com.inflearn.jpabootshop.repository;
 
 import com.inflearn.jpabootshop.domain.Order;
-import com.inflearn.jpabootshop.domain.*;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.inflearn.jpabootshop.domain.OrderSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -19,11 +18,11 @@ public class OrderRepository {
     private final EntityManager entityManager;
     //private final JPAQueryFactory jpaQueryFactory;
 
-    public void save(Order order){
+    public void save(Order order) {
         entityManager.persist(order);
     }
 
-    public Order findOne(Long id){
+    public Order findOne(Long id) {
         return entityManager.find(Order.class, id);
     }
 
@@ -39,7 +38,7 @@ public class OrderRepository {
                 //.setFirstResult() // maxResult랑 사용해서 Paging도 가능~
                 .setMaxResults(1000)
                 .getResultList()
-        ;
+                ;
     }
 
     /**
@@ -76,30 +75,38 @@ public class OrderRepository {
         return query.getResultList();
     }
 
-    public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
-        QOrder order = QOrder.order;
-        QMember member = QMember.member;
-
-        return query
-                .select(order)
-                .from(order)
-                .join(order.member, member)
-                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
-                .limit(1000)
-                .fetch();
+    public List<Order> findAllWithMemberDelivery() {
+        // Fetch Join을 이용한 해결
+        return entityManager.createQuery(
+                "select o from Order o " +
+                        "join fetch o.member m " +
+                        "join fetch o.delivery d", Order.class).getResultList();
     }
 
-    private BooleanExpression statusEq(OrderStatus status) {
-        if (status == null) {
-            return null;
-        }
-        return order.status.eq(status);
-    }
-
-    private BooleanExpression nameLike(String name) {
-        if (!StringUtils.hasText(name)) {
-            return null;
-        }
-        return member.name.like(name);
-    }
+//    public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
+//        QOrder order = QOrder.order;
+//        QMember member = QMember.member;
+//
+//        return query
+//                .select(order)
+//                .from(order)
+//                .join(order.member, member)
+//                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
+//                .limit(1000)
+//                .fetch();
+//    }
+//
+//    private BooleanExpression statusEq(OrderStatus status) {
+//        if (status == null) {
+//            return null;
+//        }
+//        return order.status.eq(status);
+//    }
+//
+//    private BooleanExpression nameLike(String name) {
+//        if (!StringUtils.hasText(name)) {
+//            return null;
+//        }
+//        return member.name.like(name);
+//    }
 }

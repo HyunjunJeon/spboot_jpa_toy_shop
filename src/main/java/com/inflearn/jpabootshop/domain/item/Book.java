@@ -8,8 +8,9 @@ import javax.persistence.Entity;
 
 @Entity
 @DiscriminatorValue("B") // 저장할 때 구분할 수 있어야함
-@Getter @Setter
-public class Book extends Item{
+@Getter
+@Setter
+public class Book extends Item {
     private String author;
     private String isbn;
 }

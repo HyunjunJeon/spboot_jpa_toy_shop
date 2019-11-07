@@ -1,10 +1,10 @@
 # SpringBoot => 밑에 Data Source, JPA 없어도 돌아간다.... Test를 알아서 H2 In-Memory로 돌려버림...
 spring:
-#  datasource:
-#    url: jdbc:mem:h2:test
-#    username: sa
-#    password:
-#    driver-class-name: org.h2.Driver
+  #  datasource:
+  #    url: jdbc:mem:h2:test
+  #    username: sa
+  #    password:
+  #    driver-class-name: org.h2.Driver
   jpa:
     database: h2
     properties:

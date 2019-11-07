@@ -12,8 +12,13 @@ spring:
       hibernate:
         format_sql: true
         jdbc.lob.non_contextual_creation: true
+  devtools:
+    livereload:
+      enabled: true
 
 logging:
   level:
     org.hibernate.type: trace # SQL Parameter Mapping 추적
     org.hibernate.SQL: debug # SQL 출력
+
+

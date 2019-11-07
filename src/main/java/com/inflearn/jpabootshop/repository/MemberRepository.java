@@ -12,27 +12,27 @@ public class MemberRepository {
     @PersistenceContext // 엔티티 매니저 주입
     private EntityManager entityManager;
 
-    public void save(Member member){
+    public void save(Member member) {
         entityManager.persist(member);
     }
 
-    public Member findOne(Long id){
+    public Member findOne(Long id) {
         return entityManager.find(Member.class, id);
     }
 
-    public List<Member> findAll(){
+    public List<Member> findAll() {
         return entityManager
                 .createQuery("select m from Member m", Member.class) // JPQL은 Entity 대상으로 쿼리를 함
                 .getResultList()
-        ;
+                ;
     }
 
-    public List<Member> findByName(String name){
+    public List<Member> findByName(String name) {
         return entityManager
                 .createQuery("select m from Member m where m.name = :name", Member.class)
                 .setParameter("name", name)
                 .getResultList()
-        ;
+                ;
     }
 
 }

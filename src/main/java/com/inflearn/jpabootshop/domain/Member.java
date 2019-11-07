@@ -1,5 +1,6 @@
 package com.inflearn.jpabootshop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,9 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter @Setter // Getter는 다 열어주되, Setter는 필요시에만 열어줘야함...
+@Getter
+@Setter // Getter는 다 열어주되, Setter는 필요시에만 열어줘야함...
 public class Member {
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "member_id")
     private Long id;
 
@@ -21,7 +24,7 @@ public class Member {
     @Embedded
     private Address address;
 
-    // @JsonIgnore // Jackson이 JSON화 할 때, 제외하고 만듦
+    @JsonIgnore // Jackson이 JSON화 할 때, 제외하고 만듦 + 양방향 연관관계니까 Order쪽에서 조회할 때 무한루프가 발생함!
     @OneToMany(mappedBy = "member") // Order class 의 member 라는 field 가 연관관계의 주인임을 가르킴
     private List<Order> orders = new ArrayList<>();
 }
