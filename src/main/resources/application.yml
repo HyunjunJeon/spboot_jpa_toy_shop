@@ -22,3 +22,5 @@ logging:
     org.hibernate.SQL: debug # SQL 출력
 
 
+
+

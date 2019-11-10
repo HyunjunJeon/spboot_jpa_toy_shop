@@ -107,7 +107,7 @@ public class OrderRepository {
                         " join o.delivery d", SimpleOrderQueryDto.class)
                 .getResultList();
     }
-
+    /*
     public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
         QOrder order = QOrder.order;
         QMember member = QMember.member;
@@ -134,4 +134,5 @@ public class OrderRepository {
         }
         return member.name.like(name);
     }
+     */
 }
