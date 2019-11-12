@@ -1,4 +1,4 @@
-# Spring Boot(+JPA) 로 만드는 간단 쇼핑몰
+# Spring Boot(+JPA)
 
 ## API를 최적화 하는 방식의 순서..
 1. 엔티티 조회 방식으로 우선 접근
