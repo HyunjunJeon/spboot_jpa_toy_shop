@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ public class Order {
 
     // Cascade 옵션 때문에 Order 엔티티에 객체 할당되면 강제로 persist 다 날려줌
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @BatchSize(size = 1000) // 국소적인 IN쿼리를 통한 최적화를 위해서...(Global로 yaml에 남기지 않고~)
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)

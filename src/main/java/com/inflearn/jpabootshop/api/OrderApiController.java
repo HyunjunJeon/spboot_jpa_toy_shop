@@ -5,6 +5,7 @@ import com.inflearn.jpabootshop.repository.OrderRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -56,6 +57,18 @@ public class OrderApiController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/api2/v3.1/orders")
+    public List<OrderDto2> api2OrdersV3_Page(
+            @RequestParam(value = "offset", defaultValue = "0") int offset,
+            @RequestParam(value = "limit", defaultValue = "100") int limit) {
+
+        List<Order> orders = orderRepository.findAllWithMemberDelivery2(offset, limit); // 1. Collection 아닌건 fetch Join으로 가져옴( *ToOne 관계니까)
+
+        return orders.stream()
+                .map(OrderDto2::new)
+                .collect(Collectors.toList());
+    }
+
 
 
     @Getter
@@ -102,7 +115,6 @@ public class OrderApiController {
                 this.count = orderItem.getCount();
             }
         }
-
 
     }
 }

@@ -113,6 +113,7 @@ public class OrderRepository {
             1) DB에 SQL 날릴 때, distinct 를 포함해서 날림
             2) 가져온 데이터에 중복이 있을 경우, Collection에 담을때 제거하고 담아줌
          */
+
         // Collection fetch join을 사용하기 때문에 paging이 불가능함!
         // 여러개의 Collection에 fetch join을 사용해서도 안된다.
         return entityManager.createQuery(
@@ -121,6 +122,24 @@ public class OrderRepository {
                         " join fetch o.delivery d" +
                         " join fetch o.orderItems oi" +
                         " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery2(int offset, int limit) {
+        // yaml 파일에 default_batch_fetch_size 옵션을 적용했음(Global)
+        /*
+            @페이징 한계돌파
+            1) xToOne 관계를 모두 Fetch Join으로 처리한다(xToOne 관계는 row의 수를 증가시키지 않으므로 페이징 쿼리에 영향 X)
+            2) 컬렉션은 지연로딩으로 조회(-> 처음 Entity 구성할 때 했던 그대로..)
+            3) 지연 로딩의 '성능 최적화' 를 위해 Batch 로 쿼리가 나갈 수 있게끔 Global(YAML), Local(@BatchSize) 한 전략을 적용
+               -> SQL IN절을 사용함
+         */
+        return entityManager.createQuery(
+                "select o from Order o " +
+                        "join fetch o.member m " +
+                        "join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
                 .getResultList();
     }
 
