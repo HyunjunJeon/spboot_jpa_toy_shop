@@ -2,6 +2,8 @@ package com.inflearn.jpabootshop.api;
 
 import com.inflearn.jpabootshop.domain.*;
 import com.inflearn.jpabootshop.repository.OrderRepository;
+import com.inflearn.jpabootshop.repository.order.query.OrderQueryDto;
+import com.inflearn.jpabootshop.repository.order.query.OrderQueryRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class OrderApiController {
     private final OrderRepository orderRepository;
+    private final OrderQueryRepository orderQueryRepository;
 
     // 주문조회 ver.1 : 엔티티 직접 노출
     @GetMapping("/api2/v1/orders")
@@ -69,7 +72,10 @@ public class OrderApiController {
                 .collect(Collectors.toList());
     }
 
-
+    @GetMapping("/api2/v4/orders")
+    public List<OrderQueryDto> api2OrdersV4() {
+        return orderQueryRepository.findOrderQueryDtos();
+    }
 
     @Getter
     static class OrderDto2{
@@ -115,6 +121,5 @@ public class OrderApiController {
                 this.count = orderItem.getCount();
             }
         }
-
     }
 }

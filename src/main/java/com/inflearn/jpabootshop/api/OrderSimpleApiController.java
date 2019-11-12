@@ -5,7 +5,7 @@ import com.inflearn.jpabootshop.domain.Order;
 import com.inflearn.jpabootshop.domain.OrderSearch;
 import com.inflearn.jpabootshop.domain.OrderStatus;
 import com.inflearn.jpabootshop.repository.OrderRepository;
-import com.inflearn.jpabootshop.repository.SimpleOrderQueryDto;
+import com.inflearn.jpabootshop.repository.order.simplequery.SimpleOrderQueryDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

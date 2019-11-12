@@ -2,6 +2,7 @@ package com.inflearn.jpabootshop.repository;
 
 import com.inflearn.jpabootshop.domain.Order;
 import com.inflearn.jpabootshop.domain.OrderSearch;
+import com.inflearn.jpabootshop.repository.order.simplequery.SimpleOrderQueryDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

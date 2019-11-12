@@ -1,4 +1,4 @@
-package com.inflearn.jpabootshop.repository;
+package com.inflearn.jpabootshop.repository.order.simplequery;
 
 import com.inflearn.jpabootshop.domain.Address;
 import com.inflearn.jpabootshop.domain.Order;
