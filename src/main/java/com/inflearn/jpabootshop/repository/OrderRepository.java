@@ -1,8 +1,7 @@
 package com.inflearn.jpabootshop.repository;
 
 import com.inflearn.jpabootshop.domain.Order;
-import com.inflearn.jpabootshop.domain.*;
-import com.querydsl.core.types.dsl.BooleanExpression;
+import com.inflearn.jpabootshop.domain.OrderSearch;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -107,6 +106,24 @@ public class OrderRepository {
                         " join o.delivery d", SimpleOrderQueryDto.class)
                 .getResultList();
     }
+
+    public List<Order> findAllWithItem() {
+        /*
+            JPQL distinct 키워드
+            1) DB에 SQL 날릴 때, distinct 를 포함해서 날림
+            2) 가져온 데이터에 중복이 있을 경우, Collection에 담을때 제거하고 담아줌
+         */
+        // Collection fetch join을 사용하기 때문에 paging이 불가능함!
+        // 여러개의 Collection에 fetch join을 사용해서도 안된다.
+        return entityManager.createQuery(
+                "select distinct o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d" +
+                        " join fetch o.orderItems oi" +
+                        " join fetch oi.item i", Order.class)
+                .getResultList();
+    }
+
     /*
     public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
         QOrder order = QOrder.order;
