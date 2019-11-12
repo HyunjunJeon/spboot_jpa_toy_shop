@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -41,5 +43,48 @@ public class OrderQueryRepository {
                         "from Order o" +
                         " join o.member m" +
                         " join o.delivery d", OrderQueryDto.class).getResultList();
+    }
+
+    public List<OrderQueryDto> findAllByDtoOptimizing() {
+        List<OrderQueryDto> orders = findOrders(); // ToOne 관계 먼저 조회하고
+
+        List<Long> orderIds = orders.stream()
+                .map(o -> o.getOrderId()) // 먼저 조회한 것에서 얻은 식별자로
+                .collect(Collectors.toList());
+
+        // ToMany 관계를 한방에 조회하고~
+        List<OrderItemQueryDto> orderItems = em.createQuery(
+                " select new com.inflearn.jpabootshop.repository.order.query.OrderItemQueryDto(oi.order.id, i.name, oi.orderPrice, oi.count)" +
+                        " from OrderItem oi" +
+                        " join oi.item i" +
+                        " where oi.order.id in :orderIds", OrderItemQueryDto.class)
+                .setParameter("orderIds", orderIds)
+                .getResultList();
+
+        // 루프를 돌려서 매칭하는게 아니라, 그냥 Map으로 바꿔서 메모리에 올려두고
+        Map<Long, List<OrderItemQueryDto>> orderItemMap = orderItems.stream()
+                .collect(Collectors.groupingBy(OrderItemQueryDto::getOrderId));
+
+        // 바로 setOrderItems 에 매칭시켜버리기
+        orders.forEach(o -> o.setOrderItems(orderItemMap.get(o.getOrderId())));
+
+        return orders;
+    }
+
+    public List<OrderFlatDto> findAllByDtoFlat() {
+        // 쿼리가 1번만 나가게끔 만듬!
+        // 그리고 Order를 기준으로 페이징은 불가능해...
+        List<OrderFlatDto> resultList = em.createQuery(
+                "select new com.inflearn.jpabootshop.repository.order.query.OrderFlatDto(" +
+                        "o.id, m.name, o.orderDate, o.status, d.address, i.name, oi.orderPrice, oi.count" +
+                        ")" +
+                        " from Order o" +
+                        " join o.member m" +
+                        " join o.delivery d" +
+                        " join o.orderItems oi" +
+                        " join oi.item i", OrderFlatDto.class)
+                .getResultList();
+
+        return resultList;
     }
 }

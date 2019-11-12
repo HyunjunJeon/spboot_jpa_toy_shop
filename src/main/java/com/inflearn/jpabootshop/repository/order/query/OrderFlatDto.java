@@ -2,33 +2,30 @@ package com.inflearn.jpabootshop.repository.order.query;
 
 import com.inflearn.jpabootshop.domain.Address;
 import com.inflearn.jpabootshop.domain.OrderStatus;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Getter
-@Setter
-@ToString
-@EqualsAndHashCode(of = "orderId")
-public class OrderQueryDto {
+@Data
+public class OrderFlatDto {
     private Long orderId;
     private String name;
     private LocalDateTime orderDate;
     private OrderStatus orderStatus;
     private Address address;
-    private List<OrderItemQueryDto> orderItems;
 
-    public OrderQueryDto(Long orderId, String name, LocalDateTime orderDate, OrderStatus orderStatus, Address address) {
+    private String itemName;
+    private int orderPrice;
+    private int count;
+
+    public OrderFlatDto(Long orderId, String name, LocalDateTime orderDate, OrderStatus orderStatus, Address address, String itemName, int orderPrice, int count) {
         this.orderId = orderId;
         this.name = name;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
         this.address = address;
+        this.itemName = itemName;
+        this.orderPrice = orderPrice;
+        this.count = count;
     }
-
-
 }

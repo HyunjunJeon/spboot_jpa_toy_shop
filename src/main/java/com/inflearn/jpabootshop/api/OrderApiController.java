@@ -2,6 +2,7 @@ package com.inflearn.jpabootshop.api;
 
 import com.inflearn.jpabootshop.domain.*;
 import com.inflearn.jpabootshop.repository.OrderRepository;
+import com.inflearn.jpabootshop.repository.order.query.OrderFlatDto;
 import com.inflearn.jpabootshop.repository.order.query.OrderQueryDto;
 import com.inflearn.jpabootshop.repository.order.query.OrderQueryRepository;
 import lombok.Getter;
@@ -75,6 +76,26 @@ public class OrderApiController {
     @GetMapping("/api2/v4/orders")
     public List<OrderQueryDto> api2OrdersV4() {
         return orderQueryRepository.findOrderQueryDtos();
+    }
+
+    @GetMapping("/api2/v5/orders")
+    public List<OrderQueryDto> api2OrdersV5() {
+        return orderQueryRepository.findAllByDtoOptimizing();
+    }
+
+    @GetMapping("/api2/v6/orders")
+    public List<OrderFlatDto> api2OrdersV6() {
+        List<OrderFlatDto> flat = orderQueryRepository.findAllByDtoFlat();
+        // OrderQueryDto로 내보내고 싶다면 직접 리스트를 조회해서 다 하나하나 매핑시켜주면됌(애플리케이션에서의 추가작업이 너무 크다..)
+//        return flat.stream()
+//                .collect(Collectors.groupingBy(o -> new OrderQueryDto()),
+//                        Collectors.mapping(o -> new OrderItemQueryDto()))
+//                .entrySet().stream()
+//                .map(e -> new OrderQueryDto())
+//                .collect(Collectors.toList());
+//        ;
+
+        return flat;
     }
 
     @Getter
