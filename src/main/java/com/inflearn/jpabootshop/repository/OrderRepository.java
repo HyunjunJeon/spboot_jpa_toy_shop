@@ -1,8 +1,9 @@
 package com.inflearn.jpabootshop.repository;
 
 import com.inflearn.jpabootshop.domain.Order;
-import com.inflearn.jpabootshop.domain.OrderSearch;
+import com.inflearn.jpabootshop.domain.*;
 import com.inflearn.jpabootshop.repository.order.simplequery.SimpleOrderQueryDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,7 +19,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class OrderRepository {
     private final EntityManager entityManager;
-    private final JPAQueryFactory jpaQueryFactory;
 
     public void save(Order order) {
         entityManager.persist(order);
@@ -144,32 +144,30 @@ public class OrderRepository {
                 .getResultList();
     }
 
-    /*
+
     public List<Order> findAllByQueryDsl(OrderSearch orderSearch) {
         QOrder order = QOrder.order;
         QMember member = QMember.member;
 
-        return jpaQueryFactory
+        JPAQueryFactory query = new JPAQueryFactory(entityManager);
+
+        return query
                 .select(order)
                 .from(order)
                 .join(order.member, member)
-                .where(statusEq(orderSearch.getOrderStatus(), order), nameLike(orderSearch.getMemberName(), member))
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch.getMemberName()))
                 .limit(1000)
                 .fetch();
     }
 
-    private BooleanExpression statusEq(OrderStatus status, QOrder order) {
-        if (status == null) {
-            return null;
-        }
-        return order.status.eq(status);
+    private BooleanExpression statusEq(OrderStatus status) {
+        if (status == null) return null;
+        return QOrder.order.status.eq(status);
     }
 
-    private BooleanExpression nameLike(String name, QMember member) {
-        if (!StringUtils.hasText(name)) {
-            return null;
-        }
-        return member.name.like(name);
+    private BooleanExpression nameLike(String name) {
+        if (!StringUtils.hasText(name)) return null;
+        return QMember.member.name.like(name);
     }
-     */
+
 }

@@ -98,6 +98,12 @@ public class OrderApiController {
         return flat;
     }
 
+    @GetMapping("/api3/v1/orders")
+    public List<Order> api3OrdersV1() {
+        // QueryDSL을 사용한 쿼리로 테스트 해봄
+        return orderRepository.findAllByQueryDsl(new OrderSearch());
+    }
+
     @Getter
     static class OrderDto2{
         private Long orderId;
