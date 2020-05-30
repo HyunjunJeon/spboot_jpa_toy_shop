@@ -25,5 +25,8 @@ logging:
     org.hibernate.SQL: debug # SQL 출력
 
 
+    # 테스트 주석
+
+
 
 
